@@ -18,9 +18,9 @@ class Command(BaseCommand):
         User.objects.all().exclude(username='admin').delete()
 
     def _create_data(self):
-        u1 = User(username='valerio')
+        u1 = User(username='valerio', password='valerio')
         u1.save()
-        u2 = User(username='bob')
+        u2 = User(username='bob', password='bob')
         u2.save()
 
         p1 = Project(owner=u1,
