@@ -38,7 +38,7 @@ def dashboard(request):
 @login_required(login_url='/login/')
 def project(request, project_id):
     project = Project.objects.get(pk=project_id)
-    coders = project.coders
+    coders = project.coders.all()
 
     # only users assigned to the project can see the project page
     if not request.user in coders.all():
@@ -57,5 +57,6 @@ def project(request, project_id):
 
     return render(request,
                   'codegui/project.html', {'project':project,
+                                           'coders':coders,
                                            'n_messages':n_messages,
                                            'n_codes':n_codes})
