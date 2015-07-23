@@ -8,17 +8,9 @@ def dashboard(request):
        if the user is not the admin show his dashboard,
        if the user is not authenticated show the login page.
     '''
-#    username = None
-#    if request.user.is_authenticated():
-#        username = request.user.username
 
     if username == 'admin':
         return render(request, 'codegui/dashboard_admin.html', {})
     else:
         #if username != None:
         return render(request, 'codegui/dashboard.html', {})
-#    else:
-#        return render(request, 'codegui/login.html', {})
-
-def login(request):
-    return render(request, 'codegui/login.html', {})
