@@ -1,1 +1,13 @@
-Welcome user {{username}}!
+{% extends "codegui/base.html" %}
+{% block content %}
+<p>
+  Welcome {{username}}!
+</p>
+
+<h2>Projects:</h2>
+</ul>
+{% for project in projects %}
+    <li><a href='/project/{{ project.id }}'>{{ project }}</a></li>
+{% endfor %}
+</ul>
+{% endblock content%}
