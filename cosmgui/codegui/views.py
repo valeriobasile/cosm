@@ -52,6 +52,7 @@ def project(request, project_id):
     # count the messages of the project
     n_messages = project.message_set.count()
     # for each message, count 1 if there is at least one code
+    # (not sure how efficient/scalable this is)
     n_codes = sum(map(lambda x: int(x.code_set.all().count()>0), messages))
 
     return render(request,
