@@ -2,9 +2,11 @@ from django.db import models
 from django.utils import timezone
 
 class Project(models.Model):
-    owner = models.ForeignKey('auth.User')
+    owner = models.ForeignKey('auth.User', related_name='owner')
     name = models.CharField(max_length=200)
     description = models.TextField()
+    coders = models.ManyToManyField('auth.User', related_name='coders')
+
     # TODO add API keys
 
     def __str__(self):

@@ -28,6 +28,9 @@ class Command(BaseCommand):
                      name='Italian case 2015',
                      description='all tweets about pizza sent in July 2015')
         p1.save()
+        p1.coders.add(u1)
+        p1.coders.add(u2)
+        p1.save()
 
         m1 = Message(project=p1,
                      author='f00d_heaven',

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from codegui.models import Project
 
 @login_required(login_url='/login/')
 def dashboard(request):
@@ -26,6 +27,9 @@ def dashboard(request):
         return render(request,
                       'codegui/dashboard_admin.html', {})
     else:
+        # regular user (coder)
+        projects = Project.objects.all.filter(coders=request.user)
+
         return render(request,
                       'codegui/dashboard.html',
                       {'username':request.user.username})
