@@ -16,12 +16,14 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from codegui import views
-from django.contrib.auth import views as auth_views
+#from django.contrib.auth.views import logout as auth_logout
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^dashboard', views.dashboard),
+    url(r'^dashboard$', views.dashboard),
     url(r'^accounts/profile/', views.dashboard),
     url(r'^$', views.dashboard),
-    url(r'^login/$', 'django.contrib.auth.views.login',name="login")
+    url(r'^login/$', 'django.contrib.auth.views.login',name="login"),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
+    url(r'^project/(?P<project_id>[0-9]+)$', views.project),
 ]

@@ -28,8 +28,15 @@ def dashboard(request):
                       'codegui/dashboard_admin.html', {})
     else:
         # regular user (coder)
-        projects = Project.objects.all.filter(coders=request.user)
+        projects = Project.objects.all().filter(coders=request.user)
 
         return render(request,
                       'codegui/dashboard.html',
-                      {'username':request.user.username})
+                      {'username':username,
+                       'projects':projects})
+
+@login_required(login_url='/login/')
+def project(request, project_id):
+    project = Project.objects.get(pk=project_id)
+    return render(request,
+                  'codegui/project.html', {'project':project})
