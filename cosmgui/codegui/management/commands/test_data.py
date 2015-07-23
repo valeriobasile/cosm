@@ -88,6 +88,13 @@ class Command(BaseCommand):
                      content='thank you for this double pasta slam http://t.co/nQU9mjjAtf')
         m7.save()
 
+        m8 = Message(project=p1,
+                     author='pippo',
+                     source='twitter',
+                     timestamp=datetime.utcfromtimestamp(1437655428).replace(tzinfo=pytz.utc),
+                     content='pasta col pesto')
+        m8.save()
+
         v1 = Variable(project=p2,
                       name='sentiment',
                       description='Describes the polarity of the sentiment ' \

@@ -13,6 +13,11 @@ class Project(models.Model):
         return self.name
 
 class Message(models.Model):
+    """
+    A message is a single instance of social media object to code.
+    Typical examples of messages are Twitter tweets or Facebook posts.
+    """
+
     project = models.ForeignKey('Project')
     '''
     The metadata of a message are usually included in the content
@@ -23,7 +28,7 @@ class Message(models.Model):
     author = models.CharField(max_length=200)
     source = models.CharField(max_length=200)
     timestamp = models.DateTimeField()
-
+    coded = models.BooleanField(default=False)
     '''
     The content is a blob field of text that could encode XML, JSON etc.,
     depending on the source of the message.
@@ -36,6 +41,11 @@ class Message(models.Model):
             self.timestamp)
 
 class Variable(models.Model):
+    """
+    A variable is one aspect of a message that has to be coded.
+    Variables in COSM are always categorical, that is, their value is
+    chosen from a fix list of possible choices (categories).
+    """
     project = models.ForeignKey('Project')
     name = models.CharField(max_length=200)
     description = models.TextField()
@@ -44,6 +54,10 @@ class Variable(models.Model):
         return self.name
 
 class Category(models.Model):
+    """
+    A variable category is one of the possible categories that said
+    variable can assume in the coding process.
+    """
     variable = models.ForeignKey('Variable')
     value = models.CharField(max_length=200)
     label = models.CharField(max_length=200)

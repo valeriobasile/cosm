@@ -1,4 +1,19 @@
 {% extends "codegui/base.html" %}
 {% block content %}
 <h2>{{project}}</h2>
+<p>
+Coders:
+<ul>
+  {% for coder in coders %}
+  <li>{{coder}}</li>
+  {% endfor %}
+</ul>
+
+</p>
+
+<p>
+  Progress: {{n_codes}}/{{n_messages}}
+</p>
+
+
 {% endblock content %}

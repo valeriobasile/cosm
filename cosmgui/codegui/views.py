@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from codegui.models import Project
+from codegui.models import Project, Message, Code
 
 @login_required(login_url='/login/')
 def dashboard(request):
@@ -38,5 +38,23 @@ def dashboard(request):
 @login_required(login_url='/login/')
 def project(request, project_id):
     project = Project.objects.get(pk=project_id)
+    coders = project.coders
+
+    # only users assigned to the project can see the project page
+    if not request.user in coders.all():
+        return render(request,
+                      'codegui/unauthorized.html',
+                      {'username':request.user.username,
+                       'project':project})
+
+    # get all the messages of the project
+    messages = project.message_set.all()
+    # count the messages of the project
+    n_messages = project.message_set.count()
+    # for each message, count 1 if there is at least one code
+    n_codes = sum(map(lambda x: int(x.code_set.all().count()>0), messages))
+
     return render(request,
-                  'codegui/project.html', {'project':project})
+                  'codegui/project.html', {'project':project,
+                                           'n_messages':n_messages,
+                                           'n_codes':n_codes})
