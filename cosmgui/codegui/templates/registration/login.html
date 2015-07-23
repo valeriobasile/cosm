@@ -1,3 +1,5 @@
+{% extends "codegui/base.html" %}
+{% block content %}
 Please log in.
 <form action="{% url 'login' %}" method="post" accept-charset="utf-8">
     {% csrf_token %}
@@ -11,3 +13,4 @@ Please log in.
     <input type="hidden" name="next" value="{{ next }}" />
     <input class="button small" type="submit" value="Submit"/>
 </form>
+{% endblock content%}

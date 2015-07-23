@@ -13,7 +13,9 @@
           <h1><a href="/">COSM</a></h1>
       </div>
       <div id="menu">
+        {% if request.resolver_match.url_name != 'login' %}
         <a href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
+        {% endif %}
       </div>
       <div class="main">
           {% block content %}
