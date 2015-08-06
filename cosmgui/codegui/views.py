@@ -24,8 +24,12 @@ def dashboard(request):
     '''
 
     if username == 'admin':
+        # if admin, show the admin page with all the projects
+        projects = Project.objects.all()
+
         return render(request,
-                      'codegui/dashboard_admin.html', {})
+                      'codegui/dashboard_admin.html',
+                      {'projects':projects})
     else:
         # regular user (coder)
         projects = Project.objects.all().filter(coders=request.user)
