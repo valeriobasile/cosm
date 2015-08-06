@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from codegui.models import Project, Message, Variable, Category, Code
+from codegui.models import Project, Message, Variable, Category, Code, Progress
 from django.contrib.auth.models import User
 from datetime import datetime
 import pytz
@@ -39,56 +39,64 @@ class Command(BaseCommand):
         p2.coders.add(u2)
         p2.save()
 
-        m1 = Message(project=p2,
+        m1 = Message(index=1,
+                     project=p2,
                      author='f00d_heaven',
                      source='twitter',
                      timestamp=datetime.utcfromtimestamp(1436532104).replace(tzinfo=pytz.utc),
                      content='RT @foodporntho: Pepperoni Pizza Lasagna Roll Ups http://t.co/Dexi5Xu967')
         m1.save()
 
-        m2 = Message(project=p2,
+        m2 = Message(index=2,
+                     project=p2,
                      author='veelopes199',
                      source='twitter',
                      timestamp=datetime.utcfromtimestamp(1436532117).replace(tzinfo=pytz.utc),
                      content='RT @notyabae: Fds ahahahah  https://t.co/qdupHG62pL')
         m2.save()
 
-        m3 = Message(project=p2,
+        m3 = Message(index=3,
+                     project=p2,
                      author='92NAUGHTYBOY',
                      source='twitter',
                      timestamp=datetime.utcfromtimestamp(1436532120).replace(tzinfo=pytz.utc),
                      content='A massa da pizza tava doce.')
         m3.save()
 
-        m4 = Message(project=p2,
+        m4 = Message(index=4,
+                     project=p2,
                      author='smirvnoff',
                      source='twitter',
                      timestamp=datetime.utcfromtimestamp(1436532152).replace(tzinfo=pytz.utc),
                      content='@nickdimerda tette e pizza, cioè assolutamente si, ma tette più pizza è la cosa definitiva proprio')
         m4.save()
 
-        m5 = Message(project=p2,
+        m5 = Message(index=5,
+                     project=p2,
                      author='giannicosta8472',
                      source='twitter',
                      timestamp=datetime.utcfromtimestamp(1436532155).replace(tzinfo=pytz.utc),
                      content='@Uberbored_80 appena letto. Bravo. Ho trovato un errore di ortografia hai scritto pizza anziché piazza.')
         m5.save()
 
-        m6 = Message(project=p1,
+        m6 = Message(index=1,
+                     project=p1,
                      author='Itsreddddd',
                      source='twitter',
                      timestamp=datetime.utcfromtimestamp(1437655479).replace(tzinfo=pytz.utc),
                      content='I want some pasta')
         m6.save()
 
-        m7 = Message(project=p1,
+        m7 = Message(index=2,
+                     project=p1,
                      author='pneumoria',
                      source='twitter',
                      timestamp=datetime.utcfromtimestamp(1437655427).replace(tzinfo=pytz.utc),
                      content='thank you for this double pasta slam http://t.co/nQU9mjjAtf')
         m7.save()
 
-        m8 = Message(project=p1,
+        m8 = Message(index=3,
+                     project=p1,
                      author='pippo',
                      source='twitter',
                      timestamp=datetime.utcfromtimestamp(1437655428).replace(tzinfo=pytz.utc),
@@ -166,6 +174,11 @@ class Command(BaseCommand):
 
         Code(coder=u1, message=m6, code=c5).save()
         Code(coder=u1, message=m7, code=c6).save()
+
+        Progress(project=p1, coder=u1, index=0).save()
+        Progress(project=p1, coder=u2, index=1).save()
+        Progress(project=p2, coder=u1, index=2).save()
+        Progress(project=p2, coder=u2, index=0).save()
 
     def handle(self, *args, **options):
         self._remove_data()

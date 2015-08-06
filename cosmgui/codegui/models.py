@@ -6,7 +6,6 @@ class Project(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     coders = models.ManyToManyField('auth.User', related_name='coders')
-
     # TODO add API keys
 
     def __str__(self):
@@ -25,6 +24,7 @@ class Message(models.Model):
     but some metadata is kept explicitly in the model for indexing and
     referencing from other models.
     '''
+    index = models.IntegerField(default=0) # messages are indexed in order to track the progress
     author = models.CharField(max_length=200)
     source = models.CharField(max_length=200)
     timestamp = models.DateTimeField()
@@ -77,3 +77,11 @@ class Code(models.Model):
         return '{} {} {}'.format(self.timestamp,
             self.coder,
             self.message)
+
+class Progress(models.Model):
+    """This model represent the coding status of a project from a particular
+    coder's perspective.
+    """
+    project = models.ForeignKey('Project')
+    coder = models.ForeignKey('auth.User')
+    index = models.IntegerField(default=0) # the index of the last coded message
