@@ -1,0 +1,15 @@
+{% extends "codegui/base.html" %}
+{% block content %}
+<h2>{{project}}</h2>
+
+<p>{{message}}</p>
+
+<p>
+<ul>
+  {% for variable in variables %}
+  <li>{{variable}}</li>
+  {% endfor %}
+</ul>
+</p>
+
+{% endblock content %}

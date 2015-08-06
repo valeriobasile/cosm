@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from codegui.models import Project, Message, Code
+from codegui.models import Project, Message, Code, Progress
 
 @login_required(login_url='/login/')
 def dashboard(request):
@@ -64,3 +64,25 @@ def project(request, project_id):
                                            'coders':coders,
                                            'n_messages':n_messages,
                                            'n_codes':n_codes})
+
+@login_required(login_url='/login/')
+def coding(request, project_id):
+    project = Project.objects.get(pk=project_id)
+    coders = project.coders.all()
+
+    # only users assigned to the project can see the project page
+    # TODO this is replicated, find a better way, e.g. a decorator
+    if not request.user in coders.all():
+        return render(request,
+                      'codegui/unauthorized.html',
+                      {'username':request.user.username,
+                       'project':project})
+
+    # get the next message to code
+    last_index = Progress.objects.get(project=project, coder=request.user).index
+    message = project.message_set.get(index=last_index+1)
+    variables = project.variable_set.all()
+    return render(request,
+                  'codegui/coding.html', {'project':project,
+                                          'message':message,
+                                          'variables':variables})
