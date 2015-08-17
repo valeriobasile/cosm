@@ -8,6 +8,7 @@ the migration must be made explicitly in Django
 with these commands:
 
   $ python manage.py makemigrations
+
   $ python manage.py migrate
 
 Test data
