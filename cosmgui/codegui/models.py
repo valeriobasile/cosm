@@ -85,3 +85,8 @@ class Progress(models.Model):
     project = models.ForeignKey('Project')
     coder = models.ForeignKey('auth.User')
     index = models.IntegerField(default=0) # the index of the last coded message
+
+    def __str__(self):
+        return '{} {} {}'.format(self.project,
+            self.coder,
+            self.index)

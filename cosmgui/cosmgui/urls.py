@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^login/$', 'django.contrib.auth.views.login',name="login"),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
     url(r'^project/(?P<project_id>[0-9]+)$', views.project),
-    url(r'^project/(?P<project_id>[0-9]+)/coding$', views.coding),
+    url(r'^project/(?P<project_id>[0-9]+)/coding$', views.coding, name='coding'),
+    url(r'^save/$', views.save),
 ]

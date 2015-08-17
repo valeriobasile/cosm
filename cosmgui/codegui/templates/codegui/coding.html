@@ -5,11 +5,22 @@
 <p>{{message}}</p>
 
 <p>
-<ul>
+<form action="/save/" method="post">
+  {% csrf_token %}
+  <input type="hidden" name="message" value="{{message.id}}"/>
   {% for variable in variables %}
-  <li>{{variable}}</li>
+    <div class="variable">
+      <span class="variable_name">{{variable.name}}</span>
+      <span class="variable_decription">{{variable.description}}</span>
+      {%for category in variable.category_set.all %}
+        <div class="category">
+          <input type="radio" name="variable_{{variable.id}}" value="{{category.value}}">{{category.label}}</input>
+        </div>
+      {% endfor %}
+    </div>
   {% endfor %}
-</ul>
+  <input type="submit" value="submit" />
+</form>
 </p>
 
 {% endblock content %}

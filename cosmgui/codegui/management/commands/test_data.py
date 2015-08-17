@@ -10,6 +10,7 @@ class Command(BaseCommand):
     help = 'Delete all the data in the database and load test data.'
 
     def _remove_data(self):
+        Progress.object.all().delete()
         Code.objects.all().delete()
         Category.objects.all().delete()
         Variable.objects.all().delete()

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from codegui.models import Project, Message, Code, Progress
+from codegui.models import Project, Message, Code, Category, Progress
+from django.shortcuts import redirect
 
 @login_required(login_url='/login/')
 def dashboard(request):
@@ -79,10 +80,43 @@ def coding(request, project_id):
                        'project':project})
 
     # get the next message to code
-    last_index = Progress.objects.get(project=project, coder=request.user).index
+    try:
+        last_index = Progress.objects.get(project=project,
+                                          coder=request.user).index
+    except (ValueError, Progress.DoesNotExist):
+        '''if there is no Progress it means that it is the first time this user
+           is coding, therefore a Progress object is created
+        '''
+        progress = Progress(project=project,
+                            coder=request.user,
+                            index=0)
+        progress.save()
+
+        last_index = 0
     message = project.message_set.get(index=last_index+1)
     variables = project.variable_set.all()
     return render(request,
                   'codegui/coding.html', {'project':project,
                                           'message':message,
                                           'variables':variables})
+
+@login_required(login_url='/login/')
+def save(request):
+    message = Message.objects.get(id=request.POST["message"])
+    project = message.project
+    for key, value in request.POST.iteritems():
+        if key.startswith("variable_"):
+            # create a new code
+            code = Code(coder=request.user,
+                        message=message,
+                        code=Category.objects.get(value=value))
+            code.save()
+
+    # update the progress (increase by one)
+    progress = Progress.objects.get(project=project,
+                                    coder=request.user)
+    progress.index = progress.index + 1
+    print progress
+    progress.save()
+
+    return redirect("coding", project_id=project.id)
