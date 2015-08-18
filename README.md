@@ -1,3 +1,24 @@
+Setup
+-----
+
+First, after cloning the project, install the requirements with pip:
+
+$ pip install -r requirements.txt
+
+Virtualenv is definitely recommended.
+
+Second, edit cosmgui/cosmgui/settings.py to match an existing database.
+
+Third, create a superuser for Django
+
+$ python manage.py createsuperuser
+
+At this point the app should be accessible through the Django development server. To run the server:
+
+$ python manage.py runserver
+
+Probably something will not work until the first database migration is done (see next paragraph).
+
 Database Schema Updates
 -----------------------
 
@@ -8,6 +29,7 @@ the migration must be made explicitly in Django
 with these commands:
 
   $ python manage.py makemigrations
+
   $ python manage.py migrate
 
 Test data

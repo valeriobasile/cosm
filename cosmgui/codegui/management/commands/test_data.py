@@ -4,6 +4,10 @@ from codegui.models import Project, Message, Variable, Category, Code, Progress
 from django.contrib.auth.models import User
 from datetime import datetime
 import pytz
+from codegui.utils import read_tweets_from_file
+import os
+from django.db import transaction
+from django.db.transaction import atomic
 
 class Command(BaseCommand):
     args = ''
@@ -18,6 +22,7 @@ class Command(BaseCommand):
         Project.objects.all().delete()
         User.objects.all().exclude(username='admin').delete()
 
+    @atomic
     def _create_data(self):
         u1 = User.objects.create_user('valerio', 'valeriobasile@gmail.com', 'valerio')
         u1.save()
@@ -39,6 +44,17 @@ class Command(BaseCommand):
         p2.coders.add(u1)
         p2.coders.add(u2)
         p2.save()
+
+        # reading tweets for project p1
+        messages = read_tweets_from_file('../data/pizza1000.json')
+        index = 0
+
+        for message in messages:
+            print message
+            message.project=p1
+            message.index = index
+            index += 1
+            message.save()
 
         m1 = Message(index=1,
                      project=p2,
@@ -80,6 +96,7 @@ class Command(BaseCommand):
                      content='@Uberbored_80 appena letto. Bravo. Ho trovato un errore di ortografia hai scritto pizza anziché piazza.')
         m5.save()
 
+        '''
         m6 = Message(index=1,
                      project=p1,
                      author='Itsreddddd',
@@ -103,7 +120,7 @@ class Command(BaseCommand):
                      timestamp=datetime.utcfromtimestamp(1437655428).replace(tzinfo=pytz.utc),
                      content='pasta col pesto')
         m8.save()
-
+        '''
         v1 = Variable(project=p2,
                       name='sentiment',
                       description='Describes the polarity of the sentiment ' \
@@ -152,6 +169,7 @@ class Command(BaseCommand):
                       label='The message is objective.')
         c6.save()
 
+        '''
         Code(coder=u1, message=m1, code=c1).save()
         Code(coder=u1, message=m1, code=c3).save()
         Code(coder=u1, message=m2, code=c2).save()
@@ -175,11 +193,7 @@ class Command(BaseCommand):
 
         Code(coder=u1, message=m6, code=c5).save()
         Code(coder=u1, message=m7, code=c6).save()
-
-        Progress(project=p1, coder=u1, index=0).save()
-        Progress(project=p1, coder=u2, index=1).save()
-        Progress(project=p2, coder=u1, index=2).save()
-        Progress(project=p2, coder=u2, index=0).save()
+        '''
 
     def handle(self, *args, **options):
         self._remove_data()
