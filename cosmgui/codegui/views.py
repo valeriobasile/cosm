@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from codegui.models import Project, Message, Code, Category, Progress
 from django.shortcuts import redirect
+from codegui.forms import ProjectForm
 
 @login_required(login_url='/login/')
 def dashboard(request):
@@ -46,7 +47,7 @@ def project(request, project_id):
     coders = project.coders.all()
 
     # only users assigned to the project can see the project page
-    if not request.user in coders.all():
+    if (not request.user in coders.all()) and (not request.user.is_superuser) :
         return render(request,
                       'codegui/unauthorized.html',
                       {'username':request.user.username,
@@ -116,7 +117,26 @@ def save(request):
     progress = Progress.objects.get(project=project,
                                     coder=request.user)
     progress.index = progress.index + 1
-    print progress
     progress.save()
 
     return redirect("coding", project_id=project.id)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def new_project(request):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+        else:
+            print form.errors
+            #return redirect('dashboard')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = ProjectForm()
+        return render(request,
+                      'codegui/new_project.html',
+                      {'form':form})

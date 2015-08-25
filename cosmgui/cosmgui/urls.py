@@ -20,12 +20,13 @@ from codegui import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^dashboard$', views.dashboard),
-    url(r'^accounts/profile/', views.dashboard),
-    url(r'^$', views.dashboard),
+    url(r'^dashboard$', views.dashboard, name="dashboard"),
+    url(r'^accounts/profile/', views.dashboard, name="dashboard"),
+    url(r'^$', views.dashboard, name="dashboard"),
     url(r'^login/$', 'django.contrib.auth.views.login',name="login"),
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
     url(r'^project/(?P<project_id>[0-9]+)$', views.project),
     url(r'^project/(?P<project_id>[0-9]+)/coding$', views.coding, name='coding'),
+    url(r'^project/new$', views.new_project),
     url(r'^save/$', views.save),
 ]

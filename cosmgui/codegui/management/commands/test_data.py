@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = 'Delete all the data in the database and load test data.'
 
     def _remove_data(self):
-        Progress.object.all().delete()
+        Progress.objects.all().delete()
         Code.objects.all().delete()
         Category.objects.all().delete()
         Variable.objects.all().delete()
@@ -50,7 +50,6 @@ class Command(BaseCommand):
         index = 0
 
         for message in messages:
-            print message
             message.project=p1
             message.index = index
             index += 1
