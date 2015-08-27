@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from codegui.models import Project, Message, Code, Category, Progress
 from django.shortcuts import redirect
 from codegui.forms import ProjectForm
+from django.db.models import Q
 
 @login_required(login_url='/login/')
 def dashboard(request):
@@ -20,26 +21,20 @@ def dashboard(request):
     '''
     username = request.user.username
 
-    '''If the user is the admin, show the project management view,
-       if the user is not the admin show his dashboard,
-       if the user is not authenticated show the login page.
+    '''
+    Show the project the user is involved in, and the project owned, separately.
+    If the user is not authenticated show the login page.
     '''
 
-    if username == 'admin':
-        # if admin, show the admin page with all the projects
-        projects = Project.objects.all()
+    # weird syntax to put OR in a query
+    projects = Project.objects.all().filter(Q(coders=request.user) | Q(owner=request.user)).distinct()
+    #projects = Project.objects.all().filter(coders=request.user)
+    #owned = Project.objects.all().filter(owner=request.user)
 
-        return render(request,
-                      'codegui/dashboard_admin.html',
-                      {'projects':projects})
-    else:
-        # regular user (coder)
-        projects = Project.objects.all().filter(coders=request.user)
-
-        return render(request,
-                      'codegui/dashboard.html',
-                      {'username':username,
-                       'projects':projects})
+    return render(request,
+                  'codegui/dashboard.html',
+                  {'username':username,
+                   'projects':projects})
 
 @login_required(login_url='/login/')
 def project(request, project_id):
