@@ -2,17 +2,44 @@ from django.db import models
 from django.utils import timezone
 
 class Project(models.Model):
+    """
+    A Project is the container for a set of messages coded by some users.
+    When first created (status == New), the daemon spawns a process to
+    download the tweets from the list of screennames, then sets the status to
+    ready.
+    """
+    owner = models.ForeignKey('auth.User', null=True)
     name = models.CharField(max_length=200)
     description = models.TextField(default='')
-    coders = models.ManyToManyField('auth.User', related_name='coders', blank=True)
-    screennames = models.TextField(default='')
-    timespan_start = models.DateField(blank=True)
+    coders = models.ManyToManyField('auth.User',
+                                    related_name='coders',
+                                    blank=True)
+    authors = models.ManyToManyField('Author')
+    timespan_start = models.DateField(null=True)
     timespan_end = models.DateField(default=timezone.now)
 
-    # TODO add API keys
+    NEW = 1
+    DOWNLOADING = 2
+    READY = 3
+    STATUS_CHOICES = (
+        (NEW, 'New'),
+        (DOWNLOADING, 'Downloading data'),
+        (READY, 'Ready'),
+    )
+    ready = models.IntegerField(choices=STATUS_CHOICES, default=NEW)
 
     def __str__(self):
         return self.name
+
+class Author(models.Model):
+    """
+    A social media user, identified by the id given by the specific platform.
+    """
+    username = models.CharField(max_length=200)
+    source = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.username
 
 class Message(models.Model):
     """
@@ -28,7 +55,7 @@ class Message(models.Model):
     referencing from other models.
     '''
     index = models.IntegerField(default=0) # messages are indexed in order to track the progress
-    author = models.CharField(max_length=200)
+    author = models.ForeignKey('Author')
     source = models.CharField(max_length=200)
     timestamp = models.DateTimeField()
     coded = models.BooleanField(default=False)
