@@ -1,0 +1,11 @@
+{% extends "codegui/base.html" %}
+{% block content %}
+<h2>New Project</h2>
+
+<form action="/project/new" method="post">
+  {% csrf_token %}
+  {{ form.as_ul }}
+  <input type="submit" value="submit" />
+</form>
+
+{% endblock content %}
