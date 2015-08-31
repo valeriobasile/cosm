@@ -33,7 +33,8 @@ class Command(BaseCommand):
 
         p1 = Project(owner=u1,
                      name='Italian case 2013',
-                     description='all tweets about pasta sent in March 2013')
+                     description='all tweets about pasta sent in March 2013',
+                     status=Project.READY)
         p1.save()
         p1.coders.add(u1)
         p1.save()
