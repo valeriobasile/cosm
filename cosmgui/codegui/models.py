@@ -15,6 +15,8 @@ class Project(models.Model):
                                     related_name='coders',
                                     blank=True)
     authors = models.ManyToManyField('Author')
+    created = models.DateTimeField(
+            default=timezone.now)
     timespan_start = models.DateField(null=True)
     timespan_end = models.DateField(default=timezone.now)
 
@@ -26,7 +28,7 @@ class Project(models.Model):
         (DOWNLOADING, 'Downloading data'),
         (READY, 'Ready'),
     )
-    ready = models.IntegerField(choices=STATUS_CHOICES, default=NEW)
+    status = models.IntegerField(choices=STATUS_CHOICES, default=NEW)
 
     def __str__(self):
         return self.name
