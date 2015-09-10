@@ -1,3 +1,7 @@
+creation of variables and categories
+
+background process
+
 visualize form error messages
 
 add "edit project"
